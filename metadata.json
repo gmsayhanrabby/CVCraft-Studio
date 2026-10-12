@@ -1,0 +1,8 @@
+{
+  "name": "CVCraft Studio - Professional CV & Resume Builder",
+  "description": "Create international standard, ATS-friendly CVs and resumes with dynamic templates, local photo upload, multilingual support, certificate sections, and mobile-friendly responsive editing.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
