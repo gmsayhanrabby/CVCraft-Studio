@@ -56,12 +56,20 @@ export const CvEditor: React.FC<CvEditorProps> = ({
   const [skillInput, setSkillInput] = useState<string>('');
   const [showCertGallery, setShowCertGallery] = useState<boolean>(false);
 
+  const personal = data?.personal || ({} as any);
+  const experiences = Array.isArray(data?.experiences) ? data.experiences : [];
+  const education = Array.isArray(data?.education) ? data.education : [];
+  const certificates = Array.isArray(data?.certificates) ? data.certificates : [];
+  const languages = Array.isArray(data?.languages) ? data.languages : [];
+  const skills = Array.isArray(data?.skills) ? data.skills : [];
+  const projects = Array.isArray(data?.projects) ? data.projects : [];
+
   // Personal Info update
   const handlePersonalChange = (fields: Partial<CVData['personal']>) => {
     onChange({
       ...data,
       personal: {
-        ...data.personal,
+        ...personal,
         ...fields
       }
     });
@@ -81,14 +89,14 @@ export const CvEditor: React.FC<CvEditorProps> = ({
     };
     onChange({
       ...data,
-      experiences: [newExp, ...data.experiences]
+      experiences: [newExp, ...experiences]
     });
   };
 
   const updateExperience = (id: string, fields: Partial<ExperienceItem>) => {
     onChange({
       ...data,
-      experiences: data.experiences.map((exp) =>
+      experiences: experiences.map((exp) =>
         exp.id === id ? { ...exp, ...fields } : exp
       )
     });
@@ -97,7 +105,7 @@ export const CvEditor: React.FC<CvEditorProps> = ({
   const removeExperience = (id: string) => {
     onChange({
       ...data,
-      experiences: data.experiences.filter((exp) => exp.id !== id)
+      experiences: experiences.filter((exp) => exp.id !== id)
     });
   };
 
@@ -115,14 +123,14 @@ export const CvEditor: React.FC<CvEditorProps> = ({
     };
     onChange({
       ...data,
-      education: [newEdu, ...data.education]
+      education: [newEdu, ...education]
     });
   };
 
   const updateEducation = (id: string, fields: Partial<EducationItem>) => {
     onChange({
       ...data,
-      education: data.education.map((edu) =>
+      education: education.map((edu) =>
         edu.id === id ? { ...edu, ...fields } : edu
       )
     });
@@ -131,7 +139,7 @@ export const CvEditor: React.FC<CvEditorProps> = ({
   const removeEducation = (id: string) => {
     onChange({
       ...data,
-      education: data.education.filter((edu) => edu.id !== id)
+      education: education.filter((edu) => edu.id !== id)
     });
   };
 
@@ -149,14 +157,14 @@ export const CvEditor: React.FC<CvEditorProps> = ({
     };
     onChange({
       ...data,
-      certificates: [newCert, ...data.certificates]
+      certificates: [newCert, ...certificates]
     });
   };
 
   const updateCertificate = (id: string, fields: Partial<CertificateItem>) => {
     onChange({
       ...data,
-      certificates: data.certificates.map((cert) =>
+      certificates: certificates.map((cert) =>
         cert.id === id ? { ...cert, ...fields } : cert
       )
     });
@@ -165,7 +173,7 @@ export const CvEditor: React.FC<CvEditorProps> = ({
   const removeCertificate = (id: string) => {
     onChange({
       ...data,
-      certificates: data.certificates.filter((cert) => cert.id !== id)
+      certificates: certificates.filter((cert) => cert.id !== id)
     });
   };
 
@@ -179,14 +187,14 @@ export const CvEditor: React.FC<CvEditorProps> = ({
     };
     onChange({
       ...data,
-      languages: [...data.languages, newLang]
+      languages: [...languages, newLang]
     });
   };
 
   const updateLanguage = (id: string, fields: Partial<LanguageItem>) => {
     onChange({
       ...data,
-      languages: data.languages.map((l) =>
+      languages: languages.map((l) =>
         l.id === id ? { ...l, ...fields } : l
       )
     });
@@ -195,7 +203,7 @@ export const CvEditor: React.FC<CvEditorProps> = ({
   const removeLanguage = (id: string) => {
     onChange({
       ...data,
-      languages: data.languages.filter((l) => l.id !== id)
+      languages: languages.filter((l) => l.id !== id)
     });
   };
 
@@ -203,10 +211,10 @@ export const CvEditor: React.FC<CvEditorProps> = ({
   const handleAddSkill = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && skillInput.trim()) {
       e.preventDefault();
-      if (!data.skills.includes(skillInput.trim())) {
+      if (!skills.includes(skillInput.trim())) {
         onChange({
           ...data,
-          skills: [...data.skills, skillInput.trim()]
+          skills: [...skills, skillInput.trim()]
         });
       }
       setSkillInput('');
@@ -216,15 +224,15 @@ export const CvEditor: React.FC<CvEditorProps> = ({
   const removeSkill = (skillToRemove: string) => {
     onChange({
       ...data,
-      skills: data.skills.filter((s) => s !== skillToRemove)
+      skills: skills.filter((s) => s !== skillToRemove)
     });
   };
 
   const addPresetSkill = (preset: string) => {
-    if (!data.skills.includes(preset)) {
+    if (!skills.includes(preset)) {
       onChange({
         ...data,
-        skills: [...data.skills, preset]
+        skills: [...skills, preset]
       });
     }
   };
@@ -241,14 +249,14 @@ export const CvEditor: React.FC<CvEditorProps> = ({
     };
     onChange({
       ...data,
-      projects: [...data.projects, newProj]
+      projects: [...projects, newProj]
     });
   };
 
   const updateProject = (id: string, fields: Partial<ProjectItem>) => {
     onChange({
       ...data,
-      projects: data.projects.map((p) =>
+      projects: projects.map((p) =>
         p.id === id ? { ...p, ...fields } : p
       )
     });
@@ -257,14 +265,14 @@ export const CvEditor: React.FC<CvEditorProps> = ({
   const removeProject = (id: string) => {
     onChange({
       ...data,
-      projects: data.projects.filter((p) => p.id !== id)
+      projects: projects.filter((p) => p.id !== id)
     });
   };
 
   // AI Summary generator helper
   const handleGenerateSummary = () => {
-    const title = data.personal.headline || 'experienced professional';
-    const topSkills = data.skills.slice(0, 4).join(', ');
+    const title = personal.headline || 'experienced professional';
+    const topSkills = skills.slice(0, 4).join(', ');
     const autoSummary = `${title} with proven track record delivering high-impact solutions in dynamic fast-paced environments. Adept in ${topSkills || 'strategic execution, project delivery, and cross-functional leadership'}. Passionate about building robust systems and driving business growth.`;
     handlePersonalChange({ summary: autoSummary });
   };
@@ -605,7 +613,7 @@ export const CvEditor: React.FC<CvEditorProps> = ({
               <span className="w-7 h-7 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center">
                 <Briefcase className="w-4 h-4" />
               </span>
-              {t.workExperience} ({data.experiences.length})
+              {t.workExperience} ({experiences.length})
             </span>
             <ChevronDown
               className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
@@ -626,7 +634,7 @@ export const CvEditor: React.FC<CvEditorProps> = ({
               </button>
 
               <div className="space-y-4">
-                {data.experiences.map((exp, idx) => (
+                {experiences.map((exp, idx) => (
                   <div
                     key={exp.id}
                     className="p-4 bg-slate-950/70 border border-slate-800 rounded-xl space-y-3 relative group"
@@ -734,7 +742,7 @@ export const CvEditor: React.FC<CvEditorProps> = ({
               <span className="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
                 <Award className="w-4 h-4" />
               </span>
-              {t.certificates} ({data.certificates.length})
+              {t.certificates} ({certificates.length})
             </span>
             <ChevronDown
               className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
@@ -797,17 +805,17 @@ export const CvEditor: React.FC<CvEditorProps> = ({
                 onAddCertificate={(cert) => {
                   onChange({
                     ...data,
-                    certificates: [cert, ...data.certificates]
+                    certificates: [cert, ...certificates]
                   });
                 }}
                 currentStyle={data.certificateStyle || 'modern_badge'}
                 onSelectStyle={(st) => onChange({ ...data, certificateStyle: st })}
-                existingCertNames={data.certificates.map((c) => c.name)}
+                existingCertNames={certificates.map((c) => c.name)}
                 lang={lang}
               />
 
               <div className="space-y-4">
-                {data.certificates.map((cert, idx) => (
+                {certificates.map((cert, idx) => (
                   <div
                     key={cert.id}
                     className="p-4 bg-slate-950/70 border border-slate-800 rounded-xl space-y-3 relative group"
@@ -917,7 +925,7 @@ export const CvEditor: React.FC<CvEditorProps> = ({
               <span className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
                 <Languages className="w-4 h-4" />
               </span>
-              {t.languages} ({data.languages.length})
+              {t.languages} ({languages.length})
             </span>
             <ChevronDown
               className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
@@ -944,7 +952,7 @@ export const CvEditor: React.FC<CvEditorProps> = ({
 
               {/* Language List */}
               <div className="space-y-2.5">
-                {data.languages.map((langItem) => (
+                {languages.map((langItem) => (
                   <div
                     key={langItem.id}
                     className="p-3 bg-slate-950/70 border border-slate-800 rounded-xl flex flex-col sm:flex-row items-stretch sm:items-center gap-3"
@@ -1002,7 +1010,7 @@ export const CvEditor: React.FC<CvEditorProps> = ({
               <span className="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center">
                 <GraduationCap className="w-4 h-4" />
               </span>
-              {t.education} ({data.education.length})
+              {t.education} ({education.length})
             </span>
             <ChevronDown
               className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
@@ -1023,7 +1031,7 @@ export const CvEditor: React.FC<CvEditorProps> = ({
               </button>
 
               <div className="space-y-4">
-                {data.education.map((edu, idx) => (
+                {education.map((edu, idx) => (
                   <div
                     key={edu.id}
                     className="p-4 bg-slate-950/70 border border-slate-800 rounded-xl space-y-3 relative group"
@@ -1115,7 +1123,7 @@ export const CvEditor: React.FC<CvEditorProps> = ({
               <span className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
                 <Wrench className="w-4 h-4" />
               </span>
-              {t.skills} ({data.skills.length})
+              {t.skills} ({skills.length})
             </span>
             <ChevronDown
               className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
@@ -1155,7 +1163,7 @@ export const CvEditor: React.FC<CvEditorProps> = ({
 
               {/* Active Skills List */}
               <div className="flex flex-wrap gap-2 pt-2">
-                {data.skills.map((skill) => (
+                {skills.map((skill) => (
                   <span
                     key={skill}
                     className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/10 text-amber-300 border border-amber-500/30 text-xs font-medium"
@@ -1186,7 +1194,7 @@ export const CvEditor: React.FC<CvEditorProps> = ({
               <span className="w-7 h-7 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
                 <FolderGit2 className="w-4 h-4" />
               </span>
-              {t.projects} ({data.projects.length})
+              {t.projects} ({projects.length})
             </span>
             <ChevronDown
               className={`w-4 h-4 text-slate-400 transition-transform duration-200 ${
@@ -1207,7 +1215,7 @@ export const CvEditor: React.FC<CvEditorProps> = ({
               </button>
 
               <div className="space-y-4">
-                {data.projects.map((proj, idx) => (
+                {projects.map((proj, idx) => (
                   <div
                     key={proj.id}
                     className="p-4 bg-slate-950/70 border border-slate-800 rounded-xl space-y-3 relative group"

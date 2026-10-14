@@ -16,14 +16,19 @@ export const CoverLetterModal: React.FC<CoverLetterModalProps> = ({ data, lang }
   const [copied, setCopied] = useState(false);
 
   const generateLetter = () => {
-    const skillsList = data.skills.slice(0, 5).join(', ');
-    const topExp = data.experiences[0];
+    const skills = Array.isArray(data?.skills) ? data.skills : [];
+    const experiences = Array.isArray(data?.experiences) ? data.experiences : [];
+    const certificates = Array.isArray(data?.certificates) ? data.certificates : [];
+    const personal = data?.personal || ({} as any);
+
+    const skillsList = skills.slice(0, 5).join(', ');
+    const topExp = experiences[0];
     const topExpStr = topExp
       ? `During my tenure as ${topExp.title} at ${topExp.company}, I spearheaded initiatives that enhanced operational throughput while maintaining top software quality.`
       : 'Throughout my career, I have consistently exceeded expectations and delivered measurable impact across projects.';
 
-    const certStr = data.certificates.length > 0
-      ? `Furthermore, my professional credentials, including ${data.certificates[0].name}, underscore my commitment to industry best practices.`
+    const certStr = certificates.length > 0
+      ? `Furthermore, my professional credentials, including ${certificates[0].name}, underscore my commitment to industry best practices.`
       : '';
 
     return `Date: ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
@@ -31,7 +36,7 @@ export const CoverLetterModal: React.FC<CoverLetterModalProps> = ({ data, lang }
 To: ${hiringManager}
 ${company}
 
-Subject: Application for ${targetRole} Position - ${data.personal.fullName}
+Subject: Application for ${targetRole} Position - ${personal.fullName || 'Applicant'}
 
 Dear ${hiringManager},
 

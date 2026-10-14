@@ -47,7 +47,7 @@ export const SAMPLE_CV_DATA: CVData = {
     linkedin: 'linkedin.com/in/sayedtanvir',
     github: 'github.com/sayedtanvir',
     summary: 'Proactive Full-Stack Software Engineer with 6+ years of experience architecting high-performance cloud applications and distributed systems. Expert in React, TypeScript, Node.js, and AWS. Proven track record leading agile engineering teams and scaling fintech platforms serving 2M+ active users.',
-    photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
+    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop&q=80',
     photoShape: 'circle',
     showPhoto: true,
   },

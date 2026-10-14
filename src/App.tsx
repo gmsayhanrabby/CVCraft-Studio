@@ -28,6 +28,39 @@ const STORAGE_KEY_DATA = 'cvcraft_user_clean_v3';
 const STORAGE_KEY_TEMPLATE = 'cvcraft_studio_template_v3';
 const STORAGE_KEY_LANG = 'cvcraft_studio_lang_v3';
 
+const sanitizeCVData = (raw: any): CVData => {
+  if (!raw || typeof raw !== 'object') return EMPTY_CV_DATA;
+  return {
+    personal: {
+      fullName: raw.personal?.fullName || '',
+      headline: raw.personal?.headline || '',
+      email: raw.personal?.email || '',
+      phone: raw.personal?.phone || '',
+      address: raw.personal?.address || '',
+      permanentAddress: raw.personal?.permanentAddress || '',
+      fatherName: raw.personal?.fatherName || '',
+      motherName: raw.personal?.motherName || '',
+      bloodGroup: raw.personal?.bloodGroup || '',
+      dateOfBirth: raw.personal?.dateOfBirth || '',
+      nationality: raw.personal?.nationality || '',
+      website: raw.personal?.website || '',
+      linkedin: raw.personal?.linkedin || '',
+      github: raw.personal?.github || '',
+      summary: raw.personal?.summary || '',
+      photo: raw.personal?.photo || '',
+      photoShape: raw.personal?.photoShape || 'circle',
+      showPhoto: raw.personal?.showPhoto !== false,
+    },
+    certificateStyle: raw.certificateStyle || 'modern_badge',
+    experiences: Array.isArray(raw.experiences) ? raw.experiences : [],
+    education: Array.isArray(raw.education) ? raw.education : [],
+    certificates: Array.isArray(raw.certificates) ? raw.certificates : [],
+    languages: Array.isArray(raw.languages) ? raw.languages : [],
+    skills: Array.isArray(raw.skills) ? raw.skills : [],
+    projects: Array.isArray(raw.projects) ? raw.projects : [],
+  };
+};
+
 export default function App() {
   // Load saved state or start completely blank
   const [data, setData] = useState<CVData>(() => {
@@ -42,7 +75,7 @@ export default function App() {
           parsed.personal.fullName !== 'Sayed Ahmed Tanvir' &&
           parsed.personal.fullName !== 'Alex Morgan'
         ) {
-          return parsed;
+          return sanitizeCVData(parsed);
         }
       }
     } catch (e) {

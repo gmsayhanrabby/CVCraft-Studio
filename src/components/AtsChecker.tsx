@@ -12,12 +12,18 @@ interface AtsCheckerProps {
 export const AtsChecker: React.FC<AtsCheckerProps> = ({ data, templateId, lang }) => {
   const t = TRANSLATIONS[lang];
 
+  const personal = data?.personal || ({} as any);
+  const experiences = Array.isArray(data?.experiences) ? data.experiences : [];
+  const education = Array.isArray(data?.education) ? data.education : [];
+  const skills = Array.isArray(data?.skills) ? data.skills : [];
+  const certificates = Array.isArray(data?.certificates) ? data.certificates : [];
+
   // Calculate ATS Score & Checklist
   const checks: { title: string; passed: boolean; tip: string; tipBn: string }[] = [];
 
   // 1. Contact info
-  const hasEmail = Boolean(data.personal.email && data.personal.email.includes('@'));
-  const hasPhone = Boolean(data.personal.phone && data.personal.phone.length > 5);
+  const hasEmail = Boolean(personal.email && personal.email.includes('@'));
+  const hasPhone = Boolean(personal.phone && personal.phone.length > 5);
   checks.push({
     title: lang === 'bn' ? 'সঠিক যোগাযোগ তথ্য' : 'Complete Contact Details',
     passed: hasEmail && hasPhone,
@@ -26,7 +32,7 @@ export const AtsChecker: React.FC<AtsCheckerProps> = ({ data, templateId, lang }
   });
 
   // 2. Summary
-  const hasSummary = Boolean(data.personal.summary && data.personal.summary.length > 50);
+  const hasSummary = Boolean(personal.summary && personal.summary.length > 50);
   checks.push({
     title: lang === 'bn' ? 'পেশাগত সারাংশ (Summary)' : 'Executive Profile Summary',
     passed: hasSummary,
@@ -35,10 +41,10 @@ export const AtsChecker: React.FC<AtsCheckerProps> = ({ data, templateId, lang }
   });
 
   // 3. Work experiences & bullets
-  const hasExp = data.experiences.length > 0;
-  const hasActionBullets = data.experiences.some((e) =>
+  const hasExp = experiences.length > 0;
+  const hasActionBullets = experiences.some((e) =>
     /\d+%|\$\d+|\d+\+|\boptimized\b|\barchitected\b|\bled\b|\bmanaged\b|\bdeveloped\b/i.test(
-      e.description
+      e.description || ''
     )
   );
   checks.push({
@@ -49,7 +55,7 @@ export const AtsChecker: React.FC<AtsCheckerProps> = ({ data, templateId, lang }
   });
 
   // 4. Skills count
-  const hasEnoughSkills = data.skills.length >= 6;
+  const hasEnoughSkills = skills.length >= 6;
   checks.push({
     title: lang === 'bn' ? 'যথেষ্ট প্রাসঙ্গিক স্কিল (কমপক্ষে ৬টি)' : 'Technical Skills Keyword Count',
     passed: hasEnoughSkills,
@@ -58,7 +64,7 @@ export const AtsChecker: React.FC<AtsCheckerProps> = ({ data, templateId, lang }
   });
 
   // 5. Education
-  const hasEdu = data.education.length > 0;
+  const hasEdu = education.length > 0;
   checks.push({
     title: lang === 'bn' ? 'শিক্ষাগত যোগ্যতা' : 'Education Information',
     passed: hasEdu,
@@ -76,7 +82,7 @@ export const AtsChecker: React.FC<AtsCheckerProps> = ({ data, templateId, lang }
   });
 
   // 7. Certificates (NEW)
-  const hasCert = data.certificates.length > 0;
+  const hasCert = certificates.length > 0;
   checks.push({
     title: lang === 'bn' ? 'সার্টিফিকেট ও লাইসেন্স' : 'Professional Certifications',
     passed: hasCert,
