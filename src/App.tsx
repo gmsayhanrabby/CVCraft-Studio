@@ -21,8 +21,19 @@ import {
   Palette, 
   RotateCcw,
   Sparkles,
-  ChevronRight
+  ChevronRight,
+  Bell,
+  X as CloseIcon
 } from 'lucide-react';
+import { AuthUser, AdminSettings } from './types/auth';
+import { LoginModal } from './components/LoginModal';
+import { SuperAdminModal } from './components/SuperAdminModal';
+import { 
+  getCurrentUser, 
+  setCurrentUserSession, 
+  getAdminSettings,
+  logoutAuthUser 
+} from './utils/authService';
 
 const STORAGE_KEY_DATA = 'cvcraft_user_clean_v3';
 const STORAGE_KEY_TEMPLATE = 'cvcraft_studio_template_v3';
@@ -111,6 +122,13 @@ export default function App() {
   // Preview zoom scale on mobile/desktop
   const [previewZoom, setPreviewZoom] = useState<number>(0.75);
 
+  // Authentication & Super Admin state
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(() => getCurrentUser());
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+  const [isSuperAdminModalOpen, setIsSuperAdminModalOpen] = useState<boolean>(false);
+  const [adminSettings, setAdminSettings] = useState<AdminSettings>(() => getAdminSettings());
+  const [announcementDismissed, setAnnouncementDismissed] = useState<boolean>(false);
+
   const t = TRANSLATIONS[lang];
 
   // Auto-save changes to localStorage
@@ -177,6 +195,19 @@ export default function App() {
     }
   };
 
+  const handleLoginSuccess = (user: AuthUser) => {
+    setCurrentUser(user);
+    if (user.role === 'super_admin') {
+      setIsSuperAdminModalOpen(true);
+    }
+  };
+
+  const handleLogout = () => {
+    logoutAuthUser();
+    setCurrentUser(null);
+    setIsSuperAdminModalOpen(false);
+  };
+
   const currentTemplate = TEMPLATES.find((t) => t.id === currentTemplateId) || TEMPLATES[0];
 
   return (
@@ -188,7 +219,30 @@ export default function App() {
         lang={lang}
         onToggleLang={handleToggleLang}
         onPrint={handlePrint}
+        currentUser={currentUser}
+        onOpenLogin={() => setIsLoginModalOpen(true)}
+        onOpenAdmin={() => setIsSuperAdminModalOpen(true)}
+        onLogout={handleLogout}
       />
+
+      {/* Optional Top Announcement Banner */}
+      {adminSettings.announcement.enabled && !announcementDismissed && (
+        <div className="bg-gradient-to-r from-amber-500/10 via-yellow-500/15 to-amber-500/10 border-b border-amber-500/20 px-4 py-2 text-xs text-amber-200 flex items-center justify-between no-print">
+          <div className="max-w-7xl mx-auto w-full flex items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0 animate-pulse" />
+              <span>{lang === 'bn' ? adminSettings.announcement.messageBn : adminSettings.announcement.message}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => setAnnouncementDismissed(true)}
+              className="text-amber-400/70 hover:text-amber-300 p-1"
+            >
+              <CloseIcon className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Main Content Areas */}
       <main className="flex-1">
@@ -382,8 +436,34 @@ export default function App() {
         )}
       </main>
 
-      {/* Global Footer */}
-      <Footer lang={lang} onSelectTab={setActiveTab} />
+      {/* Global Footer with 'high-fidelity' login trigger */}
+      <Footer 
+        lang={lang} 
+        onSelectTab={setActiveTab} 
+        onOpenLogin={() => setIsLoginModalOpen(true)}
+        currentUser={currentUser}
+        onOpenAdmin={() => setIsSuperAdminModalOpen(true)}
+        onLogout={handleLogout}
+      />
+
+      {/* Authentication Login Modal (Triggered by 'high-fidelity' click in footer or header) */}
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        lang={lang}
+        onLoginSuccess={handleLoginSuccess}
+      />
+
+      {/* Super Admin Control Center Modal */}
+      {currentUser && (
+        <SuperAdminModal
+          isOpen={isSuperAdminModalOpen}
+          onClose={() => setIsSuperAdminModalOpen(false)}
+          lang={lang}
+          currentUser={currentUser}
+          onLogout={handleLogout}
+        />
+      )}
     </div>
   );
 }

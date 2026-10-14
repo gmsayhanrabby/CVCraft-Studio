@@ -146,7 +146,30 @@ export const TRANSLATIONS = {
     targetRole: 'Target Job Title',
     generateLetter: 'Generate Cover Letter',
     copyLetter: 'Copy to Clipboard',
-    copied: 'Copied!'
+    copied: 'Copied!',
+    
+    // Auth & Admin
+    login: 'Login',
+    logout: 'Logout',
+    signIn: 'Sign In',
+    signUp: 'Create Account',
+    loginPortalTitle: 'High-Fidelity Access Portal',
+    loginPortalSubtitle: 'Secure sign in with Email & Password or Google Account.',
+    loginWithGoogle: 'Continue with Google',
+    orUseEmail: 'Or sign in with username/email',
+    usernameOrEmail: 'Username or Email Address',
+    password: 'Password',
+    rememberMe: 'Remember this device',
+    superAdminBadge: 'Super Admin',
+    adminDashboard: 'Admin Control Center',
+    loginSuccess: 'Authentication successful! Welcome back.',
+    loginFailed: 'Invalid username/email or password.',
+    registerSuccess: 'Account created and signed in successfully!',
+    quickFillAdmin: 'Administrative Access',
+    systemArchitecture: 'High-Fidelity Engine',
+    superAdminEmailDesc: 'Administrative Control Portal',
+    guestUser: 'Guest User',
+    memberRole: 'Verified Member'
   },
   bn: {
     appTitle: 'সিভিক্রাফট স্টুডিও',
@@ -293,6 +316,29 @@ export const TRANSLATIONS = {
     targetRole: 'আবেদনকৃত পদের নাম',
     generateLetter: 'কভার লেটার তৈরি করুন',
     copyLetter: 'লেখাটি কপি করুন',
-    copied: 'কপি হয়েছে!'
+    copied: 'কপি হয়েছে!',
+    
+    // Auth & Admin
+    login: 'লগইন',
+    logout: 'লগআউট',
+    signIn: 'সাইন ইন',
+    signUp: 'নতুন একাউন্ট তৈরি',
+    loginPortalTitle: 'হাই-ফিডেলিটি এক্সেস পোর্টাল',
+    loginPortalSubtitle: 'ইউজারনেম/ইমেইল এবং পাসওয়ার্ড অথবা গুগল দিয়ে নিরাপদ সাইন ইন করুন।',
+    loginWithGoogle: 'গুগল দিয়ে প্রবেশ করুন',
+    orUseEmail: 'অথবা ইউজারনেম/ইমেইল দিয়ে প্রবেশ করুন',
+    usernameOrEmail: 'ইউজারনেম অথবা ইমেইল ঠিকানা',
+    password: 'পাসওয়ার্ড',
+    rememberMe: 'ডিভাইস মনে রাখুন',
+    superAdminBadge: 'সুপার অ্যাডমিন',
+    adminDashboard: 'অ্যাডমিন কন্ট্রোল সেন্টার',
+    loginSuccess: 'সফলভাবে লগইন সম্পন্ন হয়েছে!',
+    loginFailed: 'ভুল ইউজারনেম/ইমেইল অথবা পাসওয়ার্ড।',
+    registerSuccess: 'একাউন্ট তৈরি ও লগইন সফল হয়েছে!',
+    quickFillAdmin: 'প্রশাসনিক এক্সেস',
+    systemArchitecture: 'হাই-ফিডেলিটি ইঞ্জিন',
+    superAdminEmailDesc: 'প্রশাসনিক নিয়ন্ত্রণ পোর্টাল',
+    guestUser: 'গেস্ট ইউজার',
+    memberRole: 'ভেরিফায়েড মেম্বার'
   }
 };
